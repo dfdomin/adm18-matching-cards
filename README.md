@@ -21,18 +21,14 @@ Abre `index.html` en un navegador. Los estudiantes hacen clic en una tarjeta de 
 - Se shufflean en cada reinicio
 - Lleva registro de intentos y pares completados
 
-## Despliegue
+## Recursos
 
-GitHub Pages habilitado en el repo. Accede en:
+| Recurso | Archivo | Descripción |
+|---------|---------|-------------|
+| **Tarjetas de emparejamiento** | `index.html` | Juego documento↔función (10 pares) |
+| **Anatomía del documento** | `anatomia-documento.html` | Visualización interactiva de los 9 componentes con 4 tipos de documentos |
 
-```
-https://dfdomin.github.io/adm18-matching-cards/
-```
-
-## Archivos
-
-- `index.html` — App completa (sin dependencias externas, solo Google Fonts)
-- `README.md` — Este archivo
+**Despliegue:** https://dfdomin.github.io/adm18-matching-cards/
 
 ---
 
