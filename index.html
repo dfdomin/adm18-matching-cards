@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADM18 — Emparejamiento: Documentos ↔ Funciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2b3560;
+  --gold: #ffdf2d;
+  --success: #1e7a3e;
+  --error: #c0392b;
+  --bg-page: #f0f2f5;
+  --bg-card: #ffffff;
+  --text-body: #1a1f36;
+  --text-secondary: #5a6178;
+  --radius: 12px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(180deg, var(--primary) 0%, #1f2744 100%);
+  color: white;
+  padding: 2rem 1rem 4rem;
+  text-align: center;
+}
+.header__chip {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.header__title { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.4rem; }
+.header__subtitle { font-size: 1rem; opacity: 0.85; }
+
+.wave {
+  height: 50px;
+  background: var(--bg-page);
+  margin-top: -1px;
+  border-top-left-radius: 100% 100%;
+  border-top-right-radius: 100% 100%;
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
+
+/* Score bar */
+.score-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+.score-bar__stat { text-align: center; }
+.score-bar__value { font-size: 1.6rem; color: var(--primary); }
+.score-bar__label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+.btn-reset {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+.btn-reset:hover { background: #1f2744; }
+
+/* Game board */
+.game-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 640px) { .game-board { grid-template-columns: 1fr; } }
+
+.column { }
+.column__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+  padding-left: 0.5rem;
+}
+.cards { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border 0.15s;
+  border: 3px solid transparent;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  user-select: none;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+.card.selected { border-color: var(--gold); background: #fffdf0; transform: translateY(-2px); }
+.card.matched { border-color: var(--success); background: #f0fff4; cursor: default; }
+.card.matched .card__label { color: var(--success); font-weight: 700; }
+.card.wrong { border-color: var(--error); animation: shake 0.4s; }
+.card.disabled { opacity: 0.5; cursor: default; }
+
+.card__type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+}
+.card__type--doc { color: #2c5ea8; }
+.card__type--func { color: #e67e22; }
+
+.card__text { font-weight: 600; margin-bottom: 0.3rem; }
+.card__sub { font-size: 0.8rem; color: var(--text-secondary); }
+
+.card__pair { font-size: 0.75rem; color: var(--success); font-weight: 700; margin-top: 0.4rem; display: none; }
+.card.matched .card__pair { display: block; }
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+/* Result */
+.result {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 1.5rem;
+  display: none;
+}
+.result.show { display: block; }
+.result__icon { font-size: 3rem; margin-bottom: 0.5rem; }
+.result__title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.result__text { color: var(--text-secondary); margin-bottom: 1.5rem; }
+.result .btn-reset { font-size: 1rem; padding: 0.8rem 2rem; }
+
+/* Legend */
+.legend {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow);
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.legend h3 { font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-body); }
+.legend ul { padding-left: 1.2rem; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header__chip">ADM18 · Procesamiento de Información</div>
+  <h1 class="header__title">📋 Emparejamiento: Documentos ↔ Funciones</h1>
+  <p class="header__subtitle">LatamBox S.A. — Une cada documento con su función principal</p>
+</header>
+<div class="wave"></div>
+
+<main class="container">
+
+  <div class="score-bar">
+    <div class="score-bar__stat">
+      <div class="score-bar__value" id="score-matches">0</div>
+      <div class="score-bar__label">Pares</div>
+    </div>
+    <div class="score-bar__stat">
+      <div class="score-bar__value" id="score-attempts">0</div>
+      <div class="score-bar__label">Intentos</div>
+    </div>
+    <button class="btn-reset" onclick="resetGame()">🔄 Reiniciar</button>
+  </div>
+
+  <div class="game-board" id="game-board">
+    <div class="column">
+      <div class="column__title">📄 Documentos</div>
+      <div class="cards" id="cards-doc"></div>
+    </div>
+    <div class="column">
+      <div class="column__title">🎯 Funciones</div>
+      <div class="cards" id="cards-func"></div>
+    </div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result__icon">🏆</div>
+    <div class="result__title" id="result-title">¡Completado!</div>
+    <div class="result__text" id="result-text"></div>
+    <button class="btn-reset" onclick="resetGame()">🔄 Jugar de nuevo</button>
+  </div>
+
+  <div class="legend">
+    <h3>📚 Clases documentales (GTC 185:2009)</h3>
+    <ul>
+      <li><strong>Comercial:</strong> registra transacciones económicas — facturas, cotizaciones.</li>
+      <li><strong>Administrativo:</strong> regula comunicación interna — memorandos, circulares, actas.</li>
+      <li><strong>Legal:</strong> tiene efecto jurídico — declaraciones aduaneras, poderes, contratos.</li>
+      <li><strong>Técnico:</strong> describe especificaciones — guías aéreas, fichas técnicas, manuales.</li>
+    </ul>
+  </div>
+
+</main>
+
+<script>
+const PAIRS = [
+  { id: 1, doc: "Factura de Amazon", docSub: "Amazon · Archivo Excel", docClass: "Comercial", func: "Registrar una transacción de compra-venta con fin contable", funcClass: "Comercial" },
+  { id: 2, doc: "Guía aérea AWB", docSub: "Transporte aéreo · Archivo Excel", docClass: "Técnico", func: "Rastrear el paquete y conciliar eventos de transporte", funcClass: "Técnico" },
+  { id: 3, doc: "Declaración de valor", docSub: "Aduana · Documento Word", docClass: "Legal", func: "Declarar el valor de la mercancía ante la autoridad aduanera", funcClass: "Legal" },
+  { id: 4, doc: "Memorando interno", docSub: "Comunicación interna · LatamBox", docClass: "Administrativo", func: "Comunicar decisiones, instrucciones o solicitudes entre áreas", funcClass: "Administrativo" },
+  { id: 5, doc: "Comprobante de impuestos", docSub: "Archivo Excel · DIAN", docClass: "Legal", func: "Registrar y justificar pagos de impuestos ante la autoridad fiscal", funcClass: "Legal" },
+  { id: 6, doc: "Cotización de flete", docSub: "Transportadora · Archivo Excel", docClass: "Comercial", func: "Presentar el costo de un servicio de envío para aprobación del cliente", funcClass: "Comercial" },
+  { id: 7, doc: "Manual de procedimiento", docSub: "Operaciones · LatamBox", docClass: "Técnico", func: "Establecer los pasos estándar para ejecutar un proceso operativo", funcClass: "Técnico" },
+  { id: 8, doc: "Acta de reunión", docSub: "Comité de operaciones · Word", docClass: "Administrativo", func: "Registrar decisiones tomadas en una reunión para trazabilidad", funcClass: "Administrativo" },
+  { id: 9, doc: "Correo de nacionalización", docSub: "Aduana Miami · Correo .eml", docClass: "Legal", func: "Instruir al agente sobre el proceso de levante aduanero", funcClass: "Legal" },
+  { id: 10, doc: "Encuesta de satisfacción", docSub: "Post-entrega · Documento Word", docClass: "Administrativo", func: "Recoger feedback del cliente para mejorar el servicio", funcClass: "Administrativo" },
+];
+
+let selectedDoc = null;
+let selectedFunc = null;
+let attempts = 0;
+let matchCount = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function makeCard(data, side) {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.dataset.id = data.id;
+  div.dataset.side = side;
+
+  const typeClass = side === 'doc' ? 'card__type--doc' : 'card__type--func';
+
+  div.innerHTML = `
+    <div class="card__type ${typeClass}">${data.docClass || data.funcClass}</div>
+    <div class="card__text">${side === 'doc' ? data.doc : data.func}</div>
+    <div class="card__sub">${side === 'doc' ? data.docSub : ''}</div>
+    <div class="card__pair">✓ ${side === 'doc' ? data.func : data.doc}</div>
+  `;
+
+  div.addEventListener('click', () => onCardClick(div, side, data.id));
+  return div;
+}
+
+function onCardClick(card, side, id) {
+  if (card.classList.contains('matched') || card.classList.contains('disabled')) return;
+
+  // Deselect previous
+  document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+
+  card.classList.add('selected');
+
+  if (side === 'doc') {
+    selectedDoc = { el: card, id };
+  } else {
+    selectedFunc = { el: card, id };
+  }
+
+  if (selectedDoc && selectedFunc) {
+    attempts++;
+    document.getElementById('score-attempts').textContent = attempts;
+
+    if (selectedDoc.id === selectedFunc.id) {
+      // Match!
+      selectedDoc.el.classList.remove('selected');
+      selectedFunc.el.classList.remove('selected');
+      selectedDoc.el.classList.add('matched', 'disabled');
+      selectedFunc.el.classList.add('matched', 'disabled');
+      matchCount++;
+      document.getElementById('score-matches').textContent = matchCount;
+      selectedDoc = null;
+      selectedFunc = null;
+
+      if (matchCount === PAIRS.length) {
+        setTimeout(showResult, 400);
+      }
+    } else {
+      // Wrong
+      selectedDoc.el.classList.add('wrong');
+      selectedFunc.el.classList.add('wrong');
+      setTimeout(() => {
+        selectedDoc.el.classList.remove('selected', 'wrong');
+        selectedFunc.el.classList.remove('selected', 'wrong');
+        selectedDoc = null;
+        selectedFunc = null;
+      }, 800);
+    }
+  }
+}
+
+function showResult() {
+  const pct = Math.round((PAIRS.length / attempts) * 100);
+  const msgs = [
+    `Perfecto en ${attempts} intentos. Dominas las clases documentales.`,
+    `${attempts} intentos. Muy bien. Repasa los legales y técnicos.`,
+    `${attempts} intentos. Vas bien. Revisa la diferencia entre técnico y comercial.`,
+    `${attempts} intentos. Sigue practicando — esto se aprende haciendo.`
+  ];
+  const idx = pct >= 100 ? 0 : pct >= 70 ? 1 : pct >= 40 ? 2 : 3;
+  document.getElementById('result-title').textContent = pct === 100 ? '🏆 ¡Perfecto!' : '🎉 ¡Completado!';
+  document.getElementById('result-text').textContent = msgs[idx];
+  document.getElementById('result').classList.add('show');
+}
+
+function resetGame() {
+  selectedDoc = null;
+  selectedFunc = null;
+  attempts = 0;
+  matchCount = 0;
+  document.getElementById('score-matches').textContent = '0';
+  document.getElementById('score-attempts').textContent = '0';
+  document.getElementById('result').classList.remove('show');
+  initGame();
+}
+
+function initGame() {
+  const docs = shuffle(PAIRS.map(p => ({ id: p.id, doc: p.doc, docSub: p.docSub, docClass: p.docClass })));
+  const funcs = shuffle(PAIRS.map(p => ({ id: p.id, func: p.func, funcClass: p.funcClass })));
+
+  const docCol = document.getElementById('cards-doc');
+  const funcCol = document.getElementById('cards-func');
+  docCol.innerHTML = '';
+  funcCol.innerHTML = '';
+
+  docs.forEach(d => docCol.appendChild(makeCard(d, 'doc')));
+  funcs.forEach(f => funcCol.appendChild(makeCard(f, 'func')));
+}
+
+initGame();
+</script>
+
+</body>
+</html>
