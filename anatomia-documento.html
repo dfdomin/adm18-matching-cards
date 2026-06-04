@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anatomía del Documento — 9 Componentes | ADM18</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2b3560;
+  --gold: #ffdf2d;
+  --success: #1e7a3e;
+  --orange: #e67e22;
+  --blue: #2c5ea8;
+  --red: #c0392b;
+  --green: #1e7a3e;
+  --purple: #8e44ad;
+  --teal: #16a085;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #1a1f36;
+  --muted: #5a6178;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(0,0,0,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* NAV */
+.nav {
+  background: var(--primary);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.nav__logo { font-weight: 800; font-size: 1rem; }
+.nav__title { font-size: 0.85rem; opacity: 0.85; }
+.nav__links { margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.nav__links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.nav__links a:hover { background: rgba(255,255,255,0.15); color: white; }
+.nav__links a.active { background: var(--gold); color: var(--primary); }
+
+/* HEADER */
+.header {
+  background: linear-gradient(180deg, var(--primary) 0%, #1f2744 100%);
+  color: white;
+  padding: 2.5rem 1.5rem 5rem;
+  text-align: center;
+}
+.header__chip {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.header h1 { font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 0.5rem; }
+.header p { font-size: 1rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+.wave {
+  height: 55px;
+  background: var(--bg);
+  margin-top: -1px;
+  border-top-left-radius: 100% 100%;
+  border-top-right-radius: 100% 100%;
+}
+
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+/* COMPONENT SELECTOR */
+.component-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+.comp-btn {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.comp-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.comp-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+
+/* DOC CONTAINER */
+.doc-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.doc-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-label {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.doc-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* CALLOUT ANNOTATION */
+.annotation {
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  font-size: 0.78rem;
+  max-width: 220px;
+  z-index: 20;
+  border-left: 4px solid var(--primary);
+  animation: popIn 0.25s ease;
+}
+@keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+.annotation::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: white;
+  transform: rotate(45deg);
+}
+.annotation.arrow-left::before { left: -7px; top: 14px; }
+.annotation.arrow-right::before { right: -7px; top: 14px; }
+.annotation.arrow-bottom::before { bottom: -7px; left: 50%; margin-left: -6px; transform: rotate(45deg) translate(-2px, -2px); }
+
+.annotation__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: white;
+  margin-right: 0.5rem;
+}
+.annotation__label { font-weight: 700; margin-bottom: 0.2rem; }
+.annotation__text { color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+.annotation__gtc { font-size: 0.68rem; color: var(--blue); font-style: italic; margin-top: 0.3rem; }
+
+/* NUMBER BADGE on document */
+.num-badge {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 15;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.num-badge:hover { transform: scale(1.15); }
+.num-badge span { position: relative; z-index: 16; }
+
+/* DOC STYLES */
+.doc-page {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 3rem;
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* MEMO DOC */
+.memo-doc {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+}
+.memo-doc__membrete {
+  text-align: center;
+  border-bottom: 3px solid var(--primary);
+  padding-bottom: 1rem;
+  margin-bottom: 1.2rem;
+}
+.memo-doc__membrete-logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+.memo-doc__membrete-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+.memo-doc__meta table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.memo-doc__meta td { padding: 4px 0; vertical-align: top; font-size: 0.85rem; }
+.memo-doc__meta td:first-child { width: 80px; font-weight: 700; color: var(--muted); }
+.memo-doc__asunto {
+  background: #f4f6f9;
+  border-left: 4px solid var(--primary);
+  padding: 0.7rem 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-radius: 0 6px 6px 0;
+}
+.memo-doc__body p { margin-bottom: 0.8rem; text-align: justify; font-size: 0.88rem; line-height: 1.75; }
+.memo-doc__firmas { margin-top: 2rem; }
+.memo-doc__firma-item { margin-bottom: 1.2rem; }
+.memo-doc__firma-nombre { font-weight: 700; font-size: 0.88rem; }
+.memo-doc__firma-cargo { font-size: 0.78rem; color: var(--muted); }
+.memo-doc__firma-firma { font-size: 1.5rem; font-style: italic; opacity: 0.6; margin-top: 0.2rem; }
+.memo-doc__copias {
+  margin-top: 1.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed #ccc;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.memo-doc__anexos {
+  margin-top: 1rem;
+  padding: 0.6rem 0.8rem;
+  background: #fff8f0;
+  border: 1px solid #f0d9b5;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+
+/* FACTURA DOC */
+.factura-doc { font-family: 'Open Sans', sans-serif; font-size: 0.88rem; }
+.factura-doc__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+.factura-doc__logo-area { }
+.factura-doc__logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+.factura-doc__logo-sub { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.factura-doc__factura-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: right;
+}
+.factura-doc__nit { font-size: 0.75rem; color: var(--muted); text-align: right; }
+.factura-doc__info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.factura-doc__info-box {
+  background: #f4f6f9;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+}
+.factura-doc__info-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.3rem; }
+.factura-doc__info-value { font-weight: 600; font-size: 0.85rem; }
+.factura-doc__items table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 0.8rem; }
+.factura-doc__items th {
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+.factura-doc__items td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #eee; }
+.factura-doc__totales { display: flex; justify-content: flex-end; gap: 1.5rem; }
+.factura-doc__totales-box {
+  background: #1a1f36;
+  color: white;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  text-align: right;
+}
+.factura-doc__totales-label { font-size: 0.72rem; opacity: 0.8; }
+.factura-doc__totales-value { font-size: 1.2rem; font-weight: 800; }
+
+/* EMAIL DOC */
+.email-doc { font-family: 'Open Sans', sans-serif; font-size: 0.88rem; }
+.email-doc__header {
+  background: #f4f6f9;
+  border-radius: 10px 10px 0 0;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.email-doc__row { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.email-doc__row-label { font-weight: 700; color: var(--muted); min-width: 70px; }
+.email-doc__row-value { font-weight: 600; }
+.email-doc__body {
+  padding: 1.2rem;
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+.email-doc__body p { margin-bottom: 0.8rem; }
+.email-doc__firma {
+  background: #f8f9fa;
+  border-left: 3px solid var(--primary);
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  border-radius: 0 6px 6px 0;
+}
+.email-doc__firma-name { font-weight: 700; font-size: 0.85rem; }
+.email-doc__firma-role { font-size: 0.75rem; color: var(--muted); }
+.email-doc__firma-contact { font-size: 0.75rem; color: var(--blue); }
+
+/* ACTA DOC */
+.acta-doc { font-family: 'Open Sans', sans-serif; font-size: 0.88rem; }
+.acta-doc__header {
+  text-align: center;
+  border-bottom: 3px double var(--primary);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+.acta-doc__title { font-size: 1.1rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; }
+.acta-doc__meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.acta-doc__meta-item { background: #f4f6f9; border-radius: 8px; padding: 0.6rem 0.8rem; }
+.acta-doc__meta-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.acta-doc__meta-value { font-weight: 600; font-size: 0.83rem; margin-top: 0.2rem; }
+.acta-doc__asistentes { margin-bottom: 1rem; }
+.acta-doc__asistentes-title { font-weight: 700; font-size: 0.82rem; margin-bottom: 0.5rem; }
+.acta-doc__asistentes-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 1.5rem; font-size: 0.82rem; }
+.acta-doc__seccion { margin-bottom: 1rem; }
+.acta-doc__seccion-title { font-weight: 700; font-size: 0.82rem; color: var(--primary); margin-bottom: 0.4rem; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.04em; }
+.acta-doc__firma-block { margin-top: 1.5rem; display: flex; justify-content: space-around; }
+.acta-doc__firma-item { text-align: center; }
+.acta-doc__firma-line { border-top: 1px solid #333; width: 150px; margin-top: 2rem; font-size: 0.72rem; color: var(--muted); padding-top: 0.3rem; }
+
+/* DESCRIPCION */
+.descripcion {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+.descripcion h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--primary); }
+.descripcion p { font-size: 0.88rem; color: var(--muted); line-height: 1.75; margin-bottom: 0.8rem; }
+.descripcion ul { padding-left: 1.3rem; line-height: 1.9; font-size: 0.85rem; }
+.descripcion li { margin-bottom: 0.4rem; }
+.descripcion strong { color: var(--text); }
+
+/* GRID DE COMPONENTES */
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.comp-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.2rem;
+  border-top: 4px solid var(--primary);
+}
+.comp-card__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.comp-card__name { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text); }
+.comp-card__def { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+.comp-card__ex { font-size: 0.78rem; color: var(--blue); font-style: italic; margin-top: 0.5rem; }
+
+/* COLOR MAP */
+.color-map {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.2rem 1.5rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+.color-map span { font-size: 0.78rem; font-weight: 600; }
+.color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #f0f0f0;
+}
+.color-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .doc-page { padding: 1.5rem; }
+  .factura-doc__info-grid, .acta-doc__meta, .acta-doc__asistentes-list { grid-template-columns: 1fr; }
+  .factura-doc__header { flex-direction: column; }
+  .factura-doc__factura-title { text-align: left; }
+  .annotation { max-width: 160px; font-size: 0.72rem; }
+  .memo-doc__asunto { font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav__logo">ADM18</span>
+  <span class="nav__title">Anatomía del Documento — 9 componentes</span>
+  <div class="nav__links">
+    <a href="#" class="active" onclick="showSection('all'); return false;">Ver todos</a>
+    <a href="#" onclick="showSection('memo'); return false;">Memo</a>
+    <a href="#" onclick="showSection('factura'); return false;">Factura</a>
+    <a href="#" onclick="showSection('email'); return false;">Email</a>
+    <a href="#" onclick="showSection('acta'); return false;">Acta</a>
+    <a href="#" onclick="showSection('resumen'); return false;">Resumen</a>
+  </div>
+</nav>
+
+<header class="header">
+  <div class="header__chip">GTC 185:2009 · Pacori Cari (2023)</div>
+  <h1>🩺 Anatomía del Documento</h1>
+  <p>Los 9 componentes que le dan identidad y validez — con ejemplos reales de LatamBox</p>
+</header>
+<div class="wave"></div>
+
+<div class="container">
+
+  <!-- COLOR MAP -->
+  <div class="color-map">
+    <span>Componentes:</span>
+    <div class="color-chip"><div class="color-dot" style="background:#2c5ea8"></div> Membrete</div>
+    <div class="color-chip"><div class="color-dot" style="background:#1e7a3e"></div> Fecha</div>
+    <div class="color-chip"><div class="color-dot" style="background:#e67e22"></div> Destinatario</div>
+    <div class="color-chip"><div class="color-dot" style="background:#c0392b"></div> Asunto</div>
+    <div class="color-chip"><div class="color-dot" style="background:#8e44ad"></div> Cuerpo</div>
+    <div class="color-chip"><div class="color-dot" style="background:#16a085"></div> Despedida</div>
+    <div class="color-chip"><div class="color-dot" style="background:#d35400"></div> Firma</div>
+    <div class="color-chip"><div class="color-dot" style="background:#2ecc71"></div> Anexos</div>
+    <div class="color-chip"><div class="color-dot" style="background:#7f8c8d"></div> Copia</div>
+  </div>
+
+  <!-- COMPONENT SELECTOR -->
+  <div class="component-nav" style="margin-top:1.5rem">
+    <button class="comp-btn" onclick="highlightComp(1)">1 Membrete</button>
+    <button class="comp-btn" onclick="highlightComp(2)">2 Fecha</button>
+    <button class="comp-btn" onclick="highlightComp(3)">3 Destinatario</button>
+    <button class="comp-btn" onclick="highlightComp(4)">4 Asunto</button>
+    <button class="comp-btn" onclick="highlightComp(5)">5 Cuerpo</button>
+    <button class="comp-btn" onclick="highlightComp(6)">6 Despedida</button>
+    <button class="comp-btn" onclick="highlightComp(7)">7 Firma</button>
+    <button class="comp-btn" onclick="highlightComp(8)">8 Anexos</button>
+    <button class="comp-btn" onclick="highlightComp(9)">9 Copia</button>
+  </div>
+
+  <!-- ─── MEMO (muestra 1,2,3,4,5,6,7,8,9) ─── -->
+  <div class="doc-section" id="sec-memo">
+
+    <div style="text-align:center; margin-bottom:1rem">
+      <span class="section-label" style="background:#e8f0fe;color:#2c5ea8">Documento 1 · Memorando</span>
+      <p style="font-size:0.82rem;color:var(--muted)">Este documento muestra: Membrete, Fecha, Destinatario, Asunto, Cuerpo, Despedida, Firma, Anexos, Copia</p>
+    </div>
+
+    <div class="doc-wrapper">
+      <!-- MEMBRETE -->
+      <div class="num-badge" style="background:#2c5ea8;top:1.2rem;left:1rem" onclick="highlightComp(1)">1</div>
+      <div class="annotation arrow-bottom" style="top:0.8rem;right:-10px;max-width:200px" id="ann-1">
+        <div class="annotation__label"><span class="annotation__num" style="background:#2c5ea8">1</span> Membrete</div>
+        <div class="annotation__text">Identifica al emisor: nombre, logo, dirección. Establece la autoridad de quien habla.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Componente obligatorio</div>
+      </div>
+
+      <!-- FECHA -->
+      <div class="num-badge" style="background:#1e7a3e;top:4.5rem;left:1rem" onclick="highlightComp(2)">2</div>
+      <div class="annotation arrow-left" style="top:4.2rem;right:-10px;max-width:200px" id="ann-2">
+        <div class="annotation__label"><span class="annotation__num" style="background:#1e7a3e">2</span> Fecha</div>
+        <div class="annotation__text">Ubica el documento en el tiempo. Sin fecha, no hay trazabilidad.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Completa (dd/mm/aaaa)</div>
+      </div>
+
+      <!-- DESTINATARIO -->
+      <div class="num-badge" style="background:#e67e22;top:5.5rem;left:1rem" onclick="highlightComp(3)">3</div>
+      <div class="annotation arrow-left" style="top:5.3rem;right:-10px;max-width:200px" id="ann-3">
+        <div class="annotation__label"><span class="annotation__num" style="background:#e67e22">3</span> Destinatario</div>
+        <div class="annotation__text">Define quién recibe el documento y delimita su alcance.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Nombre y cargo</div>
+      </div>
+
+      <!-- ASUNTO -->
+      <div class="num-badge" style="background:#c0392b;top:6.5rem;left:1rem" onclick="highlightComp(4)">4</div>
+      <div class="annotation arrow-left" style="top:6.3rem;right:-10px;max-width:200px" id="ann-4">
+        <div class="annotation__label"><span class="annotation__num" style="background:#c0392b">4</span> Asunto</div>
+        <div class="annotation__text">Resume el propósito en una línea. Filtro de atención para el lector.</div>
+        <div class="annotation__gtc">Pacori Cari (2023) — Funcionalidad</div>
+      </div>
+
+      <!-- CUERPO -->
+      <div class="num-badge" style="background:#8e44ad;top:9rem;left:1rem" onclick="highlightComp(5)">5</div>
+      <div class="annotation arrow-right" style="top:8.8rem;left:-10px;max-width:210px" id="ann-5">
+        <div class="annotation__label"><span class="annotation__num" style="background:#8e44ad">5</span> Cuerpo</div>
+        <div class="annotation__text">Desarrolla la información, solicitud o decisión. Párrafos breves, lógica clara.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Contenido principal</div>
+      </div>
+
+      <!-- DESPEDIDA -->
+      <div class="num-badge" style="background:#16a085;top:13.5rem;left:1rem" onclick="highlightComp(6)">6</div>
+      <div class="annotation arrow-left" style="top:13.3rem;right:-10px;max-width:200px" id="ann-6">
+        <div class="annotation__label"><span class="annotation__num" style="background:#16a085">6</span> Despedida</div>
+        <div class="annotation__text">Cierra la comunicación con cortesía profesional. "Cordialmente", "Atentamente".</div>
+        <div class="annotation__gtc">GTC 185:2009 — Cierre protocolar</div>
+      </div>
+
+      <!-- FIRMA -->
+      <div class="num-badge" style="background:#d35400;top:14.5rem;left:1rem" onclick="highlightComp(7)">7</div>
+      <div class="annotation arrow-left" style="top:14.3rem;right:-10px;max-width:200px" id="ann-7">
+        <div class="annotation__label"><span class="annotation__num" style="background:#d35400">7</span> Firma + Cargo</div>
+        <div class="annotation__text">Asigna responsabilidad. Quien firma se hace cargo del contenido.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Validez jurídica</div>
+      </div>
+
+      <!-- ANEXOS -->
+      <div class="num-badge" style="background:#2ecc71;top:17rem;left:1rem" onclick="highlightComp(8)">8</div>
+      <div class="annotation arrow-bottom" style="bottom:-10px;right:2rem;max-width:200px" id="ann-8">
+        <div class="annotation__label"><span class="annotation__num" style="background:#2ecc71">8</span> Anexos</div>
+        <div class="annotation__text">Lista los documentos que acompañan. Garantiza que no se pasen por alto.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Info complementaria</div>
+      </div>
+
+      <!-- COPIA -->
+      <div class="num-badge" style="background:#7f8c8d;top:18rem;left:1rem" onclick="highlightComp(9)">9</div>
+      <div class="annotation arrow-bottom" style="bottom:-10px;left:2rem;max-width:200px" id="ann-9">
+        <div class="annotation__label"><span class="annotation__num" style="background:#7f8c8d">9</span> Copia (CC)</div>
+        <div class="annotation__text">Informa quiénes más reciben el documento. Crea testigo, modera el tono.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Circuito de comunicación</div>
+      </div>
+
+      <div class="doc-page memo-doc">
+
+        <!-- 1 MEMBRETE -->
+        <div class="memo-doc__membrete">
+          <div class="memo-doc__membrete-logo">📦 LatamBox S.A.</div>
+          <div class="memo-doc__membrete-sub">Logística internacional · NIT 901.234.567-8 · Barranquilla, Colombia</div>
+        </div>
+
+        <!-- 2 FECHA + 3 DESTINATARIO + 4 ASUNTO -->
+        <div class="memo-doc__meta">
+          <table>
+            <tr>
+              <td>Fecha:</td>
+              <td><strong>Barranquilla, 2 de junio de 2026</strong></td>
+            </tr>
+            <tr>
+              <td>Para:</td>
+              <td><strong>Sra. María José López — Coordinador de Almacén</strong></td>
+            </tr>
+            <tr>
+              <td>De:</td>
+              <td>Ing. Carlos Mendoza — Jefe de Operaciones</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- 4 ASUNTO -->
+        <div class="memo-doc__asunto">
+          Asunto: Protocolo de recepción de paquetes en terminal de Barranquilla — Actualización junio 2026
+        </div>
+
+        <!-- 5 CUERPO -->
+        <div class="memo-doc__body">
+          <p>Estimada María José,</p>
+          <p>Reciba un cordial saludo. Me dirijo a usted con el propósito de comunicarle la actualización del protocolo de recepción de paquetes en la terminal de Barranquilla, vigente a partir del próximo lunes 8 de junio.</p>
+          <p>Como consecuencia de los recientes incidentes con paquetes extraviados en la zona de importación (caso documentado en memo interno del 28 de mayo), hemos revisado el proceso completo de recepción. Los principales cambios son:</p>
+          <p>1. Todo paquete que llegue a la terminal deberá ser escaneado en un plazo máximo de 2 horas después de la recepción física, independientemente del turno.</p>
+          <p>2. El formato de guía aérea (AWB) deberá ser contrastado con la declaración de valor antes de generar el protocolo de entrega. Cualquier discrepancia debe reportarse al correo operaciones@latambox.co antes de continuar.</p>
+          <p>3. Se incorpora un nuevo formato de checklist de inspección que encontrará adjunto a este memorando (Archivo: Checklist_Recepcion_v3.xlsx).</p>
+          <p>La implementación de estos cambios ha sido aprobada en comité de operaciones del 30 de mayo. Solicito que el equipo a su cargo revise el procedimiento y me confirme la recepción de este memo antes del viernes 5 de junio.</p>
+          <p>Quedo a su disposición para cualquier aclaración.</p>
+        </div>
+
+        <!-- 6 DESPEDIDA + 7 FIRMA -->
+        <div class="memo-doc__firmas">
+          <div class="memo-doc__firma-item">
+            <p style="margin-bottom:0.3rem">Cordialmente,</p>
+            <div class="memo-doc__firma-firma">Carlos Mendoza R.</div>
+            <div class="memo-doc__firma-nombre">Ing. Carlos Mendoza Ríos</div>
+            <div class="memo-doc__firma-cargo">Jefe de Operaciones · LatamBox Colombia</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.2rem">carlos.mendoza@latambox.co · Ext. 204</div>
+          </div>
+
+          <!-- 8 ANEXOS -->
+          <div class="memo-doc__anexos">
+            <strong>Anexos:</strong> (1) Checklist_Recepcion_v3.xlsx · (2) Protocolo_AWB_Actualizado.pdf · (3) Acta_Comite_30may2026.pdf
+          </div>
+
+          <!-- 9 COPIA -->
+          <div class="memo-doc__copias">
+            Copia para: Ing. Laura Ospina — Jefa de Operaciones (información) · Sr. Andrés Ruiz — Gerente de Almacén (conocimiento)
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="descripcion">
+      <h3>📋 Memorando — Todas las partes visibles</h3>
+      <p>El memorando es el documento que muestra <strong>todos los 9 componentes</strong> de manera más completa. Es el ejemplo ideal para la disección en clase.</p>
+      <ul>
+        <li><strong>1 Membrete</strong> → Logo y nombre de LatamBox en la cabecera</li>
+        <li><strong>2 Fecha</strong> → "Barranquilla, 2 de junio de 2026"</li>
+        <li><strong>3 Destinatario</strong> → "Para: Sra. María José López"</li>
+        <li><strong>4 Asunto</strong> → Recuadro destacado con el tema</li>
+        <li><strong>5 Cuerpo</strong> → Párrafos con la información</li>
+        <li><strong>6 Despedida</strong> → "Cordialmente"</li>
+        <li><strong>7 Firma + Cargo</strong> → Nombre, cargo y contacto</li>
+        <li><strong>8 Anexos</strong> → Lista de archivos adjuntos</li>
+        <li><strong>9 Copia</strong> → "Copia para:"</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ─── FACTURA (muestra 1,2,3,4,5,6,7) ─── -->
+  <div class="doc-section" id="sec-factura">
+
+    <div style="text-align:center; margin-bottom:1rem">
+      <span class="section-label" style="background:#e8f5e9;color:#1e7a3e">Documento 2 · Factura comercial</span>
+      <p style="font-size:0.82rem;color:var(--muted)">Muestra: Membrete, Fecha, Destinatario, Asunto (número de factura), Cuerpo, Despedida, Firma</p>
+    </div>
+
+    <div class="doc-wrapper">
+
+      <!-- 1 MEMBRETE -->
+      <div class="num-badge" style="background:#2c5ea8;top:1rem;left:1rem" onclick="highlightComp(1)">1</div>
+      <div class="annotation arrow-bottom" style="top:0.7rem;right:-10px;max-width:200px" id="ann-1b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#2c5ea8">1</span> Membrete</div>
+        <div class="annotation__text">Identifica al emisor: razón social, NIT, dirección, teléfono. Datos legales del emitente.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Identificación del emisor</div>
+      </div>
+
+      <!-- 4 ASUNTO / NUMERO FACTURA -->
+      <div class="num-badge" style="background:#c0392b;top:1rem;right:1rem" onclick="highlightComp(4)">4</div>
+      <div class="annotation arrow-bottom" style="top:0.7rem;left:-10px;max-width:200px" id="ann-4b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#c0392b">4</span> Asunto (= No. Factura)</div>
+        <div class="annotation__text">En facturas, el "asunto" es el número de factura. Identificador único del documento.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Numeración sequential</div>
+      </div>
+
+      <!-- 2 FECHA -->
+      <div class="num-badge" style="background:#1e7a3e;top:5.5rem;left:1rem" onclick="highlightComp(2)">2</div>
+      <div class="annotation arrow-left" style="top:5.3rem;right:-10px;max-width:200px" id="ann-2b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#1e7a3e">2</span> Fecha</div>
+        <div class="annotation__text">Fecha de emisión. Determina el período contable al que se asigna.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Obligatorio en comerciales</div>
+      </div>
+
+      <!-- 3 DESTINATARIO -->
+      <div class="num-badge" style="background:#e67e22;top:7rem;left:1rem" onclick="highlightComp(3)">3</div>
+      <div class="annotation arrow-left" style="top:6.8rem;right:-10px;max-width:200px" id="ann-3b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#e67e22">3</span> Destinatario</div>
+        <div class="annotation__text">Cliente: nombre o razón social, NIT, dirección. A quién se le factura.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Datos del comprador</div>
+      </div>
+
+      <!-- 5 CUERPO = LINEAS DE ITEMS -->
+      <div class="num-badge" style="background:#8e44ad;top:9.5rem;left:1rem" onclick="highlightComp(5)">5</div>
+      <div class="annotation arrow-right" style="top:9.3rem;left:-10px;max-width:200px" id="ann-5b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#8e44ad">5</span> Cuerpo (= Items)</div>
+        <div class="annotation__text">Tabla con descripción, cantidad, valor unitario y total. El contenido real de la transacción.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Información comercial</div>
+      </div>
+
+      <!-- 6 DESPEDIDA -->
+      <div class="num-badge" style="background:#16a085;top:15.5rem;left:1rem" onclick="highlightComp(6)">6</div>
+      <div class="annotation arrow-left" style="top:15.3rem;right:-10px;max-width:200px" id="ann-6b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#16a085">6</span> Despedida</div>
+        <div class="annotation__text">En facturas: condiciones de pago, vencimiento, banco. Cierra el acuerdo comercial.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Términos de la transacción</div>
+      </div>
+
+      <!-- 7 FIRMA -->
+      <div class="num-badge" style="background:#d35400;top:16.5rem;left:1rem" onclick="highlightComp(7)">7</div>
+      <div class="annotation arrow-bottom" style="bottom:-10px;left:2rem;max-width:200px" id="ann-7b">
+        <div class="annotation__label"><span class="annotation__num" style="background:#d35400">7</span> Firma + Responsable</div>
+        <div class="annotation__text">Quien firma la factura se hace responsable fiscal ante la DIAN.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Responsable fiscal</div>
+      </div>
+
+      <div class="doc-page factura-doc">
+
+        <!-- 1 MEMBRETE -->
+        <div class="factura-doc__header">
+          <div class="factura-doc__logo-area">
+            <div class="factura-doc__logo">📦 LATAMBOX S.A.</div>
+            <div class="factura-doc__logo-sub">Logística internacional · Envíos express</div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem">NIT: 901.234.567-8 · Cra 55 #80-45, Barranquilla · Tel: (605) 360-1234</div>
+          </div>
+          <div style="text-align:right">
+            <div class="factura-doc__factura-title">FACTURA</div>
+            <div class="factura-doc__nit">N° 00452 · Venta</div>
+          </div>
+        </div>
+
+        <!-- 2 FECHA + 3 DESTINATARIO -->
+        <div class="factura-doc__info-grid">
+          <div class="factura-doc__info-box">
+            <div class="factura-doc__info-label">Fecha de emisión</div>
+            <div class="factura-doc__info-value">2 de junio de 2026</div>
+          </div>
+          <div class="factura-doc__info-box">
+            <div class="factura-doc__info-label">Fecha de vencimiento</div>
+            <div class="factura-doc__info-value">17 de junio de 2026</div>
+          </div>
+          <div class="factura-doc__info-box" style="grid-column:1/-1">
+            <div class="factura-doc__info-label">Cliente / Razón social</div>
+            <div class="factura-doc__info-value">Importadora del Norte S.A.S · NIT 800.123.456-7</div>
+            <div style="font-size:0.75rem;color:var(--muted)">Calle 72 #45-12, Bogotá D.C. ·contacto@importadoradelnorte.com</div>
+          </div>
+          <div class="factura-doc__info-box">
+            <div class="factura-doc__info-label">Orden de compra</div>
+            <div class="factura-doc__info-value">OC-2026-0891</div>
+          </div>
+          <div class="factura-doc__info-box">
+            <div class="factura-doc__info-label">Médoto de pago</div>
+            <div class="factura-doc__info-value">Transferencia bancaria · 30 días</div>
+          </div>
+        </div>
+
+        <!-- 5 CUERPO -->
+        <div class="factura-doc__items">
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción del servicio</th>
+                <th>Cantidad</th>
+                <th>Vr. Unitario</th>
+                <th>Vr. Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flete aéreo MIA → BOG (kg 42.5) · Guía AWB LB4472891</td>
+                <td>1 servicio</td>
+                <td>$ 1.850.000</td>
+                <td>$ 1.850.000</td>
+              </tr>
+              <tr>
+                <td>manejo en aduana Bogotá — nacionalización</td>
+                <td>1 servicio</td>
+                <td>$ 420.000</td>
+                <td>$ 420.000</td>
+              </tr>
+              <tr>
+                <td>Seguro de carga (valor declarado $8.500.000)</td>
+                <td>1 servicio</td>
+                <td>$ 127.500</td>
+                <td>$ 127.500</td>
+              </tr>
+              <tr>
+                <td>Entrega urbana zona sur Bogotá</td>
+                <td>1 servicio</td>
+                <td>$ 85.000</td>
+                <td>$ 85.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TOTALES -->
+        <div class="factura-doc__totales">
+          <div class="factura-doc__totales-box">
+            <div class="factura-doc__totales-label">Subtotal</div>
+            <div style="font-size:0.82rem;margin-top:0.3rem">$ 2.482.500</div>
+          </div>
+          <div class="factura-doc__totales-box">
+            <div class="factura-doc__totales-label">IVA (19%)</div>
+            <div style="font-size:0.82rem;margin-top:0.3rem">$ 471.875</div>
+          </div>
+          <div class="factura-doc__totales-box" style="background:var(--gold);color:var(--primary)">
+            <div class="factura-doc__totales-label">TOTAL A PAGAR</div>
+            <div style="font-size:1.4rem;font-weight:800;margin-top:0.2rem">$ 2.954.375</div>
+          </div>
+        </div>
+
+        <!-- 6 DESPEDIDA -->
+        <div style="margin-top:1.2rem;padding:0.8rem;background:#f4f6f9;border-radius:8px;font-size:0.78rem">
+          <strong>Condiciones:</strong> Pago a 30 días. Banco: Bancolombia · Cuenta corriente N° 123-456-7890 · Ref: FACT-452. Factura-electronica@latambox.co. Cualquier reclamo deberá hacerse dentro de los 5 días hábiles siguientes a la recepción del servicio.
+        </div>
+
+        <!-- 7 FIRMA -->
+        <div style="margin-top:1.5rem;display:flex;justify-content:space-between;align-items:flex-end;padding-top:1rem;border-top:1px solid #ddd">
+          <div style="text-align:center">
+            <div style="border-top:1px solid #333;width:160px;margin-top:2rem;padding-top:0.3rem;font-size:0.72rem;color:var(--muted)">Firma responsable financiero<br>LatamBox S.A.</div>
+          </div>
+          <div style="text-align:center;font-size:0.72rem;color:var(--muted)">
+            <div style="width:80px;text-align:center">Firma cliente<br>(para aprobación)</div>
+            <div style="border-top:1px solid #333;width:80px;margin-top:2rem"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="descripcion">
+      <h3>🧾 Factura — Componentes comerciales</h3>
+      <p>La factura omite <strong>Anexos</strong> y <strong>Copia</strong> porque su función es registrar una transacción, no comunicar decisiones. El "asunto" aquí es el número de factura; la despedida son las condiciones de pago.</p>
+      <ul>
+        <li><strong>1 Membrete</strong> → Razón social, NIT, dirección, contacto</li>
+        <li><strong>2 Fecha</strong> → Emisión y vencimiento</li>
+        <li><strong>3 Destinatario</strong> → Cliente con NIT y dirección</li>
+        <li><strong>4 Asunto</strong> → Número de factura (identificador)</li>
+        <li><strong>5 Cuerpo</strong> → Tabla de items y valores</li>
+        <li><strong>6 Despedida</strong> → Condiciones de pago y banco</li>
+        <li><strong>7 Firma</strong> → Responsable financiero</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ─── EMAIL ─── -->
+  <div class="doc-section" id="sec-email">
+
+    <div style="text-align:center; margin-bottom:1rem">
+      <span class="section-label" style="background:#fef3e2;color:#e67e22">Documento 3 · Correo electrónico</span>
+      <p style="font-size:0.82rem;color:var(--muted)">Muestra: Destinatario, Asunto, Cuerpo, Despedida, Firma (no tiene membrete formal ni anexos listados de la misma manera)</p>
+    </div>
+
+    <div class="doc-wrapper">
+
+      <!-- 3 DESTINATARIO + 4 ASUNTO -->
+      <div class="num-badge" style="background:#e67e22;top:1.2rem;left:1rem" onclick="highlightComp(3)">3</div>
+      <div class="annotation arrow-left" style="top:1rem;right:-10px;max-width:200px" id="ann-3c">
+        <div class="annotation__label"><span class="annotation__num" style="background:#e67e22">3</span> Destinatario (Para)</div>
+        <div class="annotation__text">En email: campo "Para:". Define quién recibe directamente el mensaje.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Audience</div>
+      </div>
+
+      <!-- 4 ASUNTO -->
+      <div class="num-badge" style="background:#c0392b;top:3rem;left:1rem" onclick="highlightComp(4)">4</div>
+      <div class="annotation arrow-left" style="top:2.8rem;right:-10px;max-width:200px" id="ann-4c">
+        <div class="annotation__label"><span class="annotation__num" style="background:#c0392b">4</span> Asunto</div>
+        <div class="annotation__text">Primera línea que lee el destinatario. Debe ser preciso: quién, qué, urgencia.</div>
+        <div class="annotation__gtc">Pacori Cari (2023) — Filtru de atención</div>
+      </div>
+
+      <!-- 5 CUERPO -->
+      <div class="num-badge" style="background:#8e44ad;top:6rem;left:1rem" onclick="highlightComp(5)">5</div>
+      <div class="annotation arrow-right" style="top:5.8rem;left:-10px;max-width:200px" id="ann-5c">
+        <div class="annotation__label"><span class="annotation__num" style="background:#8e44ad">5</span> Cuerpo</div>
+        <div class="annotation__text">El mensaje en sí. Estructura: saludo → contexto → acción → cierre.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Contenido</div>
+      </div>
+
+      <!-- 9 COPIA (CC) -->
+      <div class="num-badge" style="background:#7f8c8d;top:4rem;right:1rem" onclick="highlightComp(9)">9</div>
+      <div class="annotation arrow-bottom" style="top:-10px;right:0.5rem;max-width:200px" id="ann-9c">
+        <div class="annotation__label"><span class="annotation__num" style="background:#7f8c8d">9</span> Copia (CC)</div>
+        <div class="annotation__text">Campo CC: otras personas que reciben copia para conocimiento o acción.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Circuito informativo</div>
+      </div>
+
+      <!-- 7 FIRMA -->
+      <div class="num-badge" style="background:#d35400;top:11rem;left:1rem" onclick="highlightComp(7)">7</div>
+      <div class="annotation arrow-left" style="top:10.8rem;right:-10px;max-width:200px" id="ann-7c">
+        <div class="annotation__label"><span class="annotation__num" style="background:#d35400">7</span> Firma (email)</div>
+        <div class="annotation__text">En email es la "firma" automática: nombre, cargo, contacto. Reemplaza la firma manuscrita.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Identificación del emisor</div>
+      </div>
+
+      <div class="doc-page email-doc">
+
+        <!-- HEADER -->
+        <div class="email-doc__header">
+          <div class="email-doc__row">
+            <span class="email-doc__row-label">De:</span>
+            <span class="email-doc__row-value">Lucía Fuentes &lt;lucia.fuentes@latambox.co&gt;</span>
+          </div>
+          <div class="email-doc__row">
+            <span class="email-doc__row-label">Para:</span>
+            <span class="email-doc__row-value">Sra. Patricia Vega &lt;pvega@cliente.com.co&gt;</span>
+          </div>
+          <div class="email-doc__row">
+            <span class="email-doc__row-label">CC:</span>
+            <span class="email-doc__row-value">Carlos Mendoza &lt;carlos.mendoza@latambox.co&gt;</span>
+          </div>
+          <div class="email-doc__row" style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid #e0e0e0">
+            <span class="email-doc__row-label">Asunto:</span>
+            <span class="email-doc__row-value" style="font-weight:800;color:var(--primary)">📦 Actualización: Paquete #447 — Retención en aduana Miami</span>
+          </div>
+        </div>
+
+        <!-- 5 CUERPO -->
+        <div class="email-doc__body">
+          <p>Estimada Sra. Vega,</p>
+          <p>Espero que se encuentre bien. Le escribo para comunicarle una actualización importante sobre el paquete #447 con destino a Cali, el cual se encuentra temporalmente retenido en la aduana de Miami.</p>
+          <p><strong>¿Qué ocurrió?</strong> Durante la revisión de rutina, la autoridad aduanera identificó una discrepancia en la declaración de valor reportada por el origen. El valor declarado en el formulario ($420 USD) no coincide con el valor real del contenido ($1.850 USD según factura de Amazon).</p>
+          <p><strong>¿Qué estamos haciendo?</strong> Ya hemos contactado al agente aduanero en Miami y hemos solicitado la corrección de la declaración de valor. El proceso de levante typically toma entre 24 y 48 horas hábiles una vez se presenta la documentación complementaria.</p>
+          <p><strong>¿Cuál es el nuevo estimado de entrega?</strong> Si la corrección se procesa mañana (3 de junio), su paquete quedaría liberado el miércoles 4 de junio y llegaría a Cali el viernes 6 de junio.</p>
+          <p>Quedo a su disposición para cualquier duda o seguimiento. Puede responder directamente a este correo o escribirme al WhatsApp business: 300-123-4567.</p>
+          <p>Atentamente,</p>
+        </div>
+
+        <!-- 7 FIRMA -->
+        <div class="email-doc__firma">
+          <div class="email-doc__firma-name">Lucía Fuentes</div>
+          <div class="email-doc__firma-role">Jefa de Atención al Cliente · LatamBox S.A.</div>
+          <div class="email-doc__firma-contact">📧 lucia.fuentes@latambox.co · 📱 300-123-4567 · 🌐 www.latambox.co</div>
+        </div>
+
+        <!-- ANEXO EMBEBIDO (para mostrar componente) -->
+        <div style="margin-top:1rem;padding:0.7rem;background:#fff8f0;border:1px solid #f0d9b5;border-radius:6px;font-size:0.75rem">
+          <strong>📎 Archivo adjunto:</strong> Declaracion_Valor_Corregida_LB447.pdf (234 KB)
+        </div>
+
+      </div>
+    </div>
+
+    <div class="descripcion">
+      <h3>📧 Correo electrónico — Componentes digitales</h3>
+      <p>El email moderno <strong>reemplaza muchos componentes</strong> del documento en papel: el membrete se convierte en el dominio del correo (@latambox.co); la firma manuscrita se convierte en la firma digital automática. Los anexos se adjuntan como archivos.</p>
+      <ul>
+        <li><strong>3 Destinatario</strong> → Campo "Para:"</li>
+        <li><strong>4 Asunto</strong> → Visible en la bandeja, debe ser preciso</li>
+        <li><strong>5 Cuerpo</strong> → Estructura: saludo → situación → acción → cierre</li>
+        <li><strong>7 Firma</strong> → Bloque al final: nombre, cargo, contactos</li>
+        <li><strong>9 Copia (CC)</strong> → Campo CC: testigos de la comunicación</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ─── ACTA (muestra 1,2,3,4,5,7) ─── -->
+  <div class="doc-section" id="sec-acta">
+
+    <div style="text-align:center; margin-bottom:1rem">
+      <span class="section-label" style="background:#f3e5f5;color:#8e44ad">Documento 4 · Acta de reunión</span>
+      <p style="font-size:0.82rem;color:var(--muted)">Muestra: Membrete, Fecha, Destinatario (= Asistentes), Asunto, Cuerpo (desarrollo), Firma</p>
+    </div>
+
+    <div class="doc-wrapper">
+
+      <!-- 1 MEMBRETE -->
+      <div class="num-badge" style="background:#2c5ea8;top:1rem;left:1rem" onclick="highlightComp(1)">1</div>
+      <div class="annotation arrow-bottom" style="top:0.7rem;right:-10px;max-width:200px" id="ann-1d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#2c5ea8">1</span> Membrete (Acta)</div>
+        <div class="annotation__text">El membrete del acta identifica a la organización que celebra la reunión. Es la entidad que respalda el documento.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Identidad institucional</div>
+      </div>
+
+      <!-- 2 FECHA -->
+      <div class="num-badge" style="background:#1e7a3e;top:3.5rem;left:1rem" onclick="highlightComp(2)">2</div>
+      <div class="annotation arrow-left" style="top:3.3rem;right:-10px;max-width:200px" id="ann-2d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#1e7a3e">2</span> Fecha</div>
+        <div class="annotation__text">Fecha y hora de la reunión. Permite verificar si las decisiones fueron tomadas a tiempo.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Trazabilidad temporal</div>
+      </div>
+
+      <!-- 3 DESTINATARIO (= ASISTENTES) -->
+      <div class="num-badge" style="background:#e67e22;top:5.5rem;left:1rem" onclick="highlightComp(3)">3</div>
+      <div class="annotation arrow-left" style="top:5.3rem;right:-10px;max-width:200px" id="ann-3d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#e67e22">3</span> Asistentes</div>
+        <div class="annotation__text">Lista de quienes participaron. Establece quiénes fueron los responsables de las decisiones.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Participantes</div>
+      </div>
+
+      <!-- 4 ASUNTO -->
+      <div class="num-badge" style="background:#c0392b;top:7.5rem;left:1rem" onclick="highlightComp(4)">4</div>
+      <div class="annotation arrow-left" style="top:7.3rem;right:-10px;max-width:200px" id="ann-4d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#c0392b">4</span> Asunto (= Objetivo)</div>
+        <div class="annotation__text">El tema de la reunión. Define el alcance de las decisiones tomadas.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Contexto de la decisión</div>
+      </div>
+
+      <!-- 5 CUERPO (= DESARROLLO) -->
+      <div class="num-badge" style="background:#8e44ad;top:9.5rem;left:1rem" onclick="highlightComp(5)">5</div>
+      <div class="annotation arrow-right" style="top:9.3rem;left:-10px;max-width:200px" id="ann-5d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#8e44ad">5</span> Cuerpo (= Desarrollo)</div>
+        <div class="annotation__text">Desarrollo temático por puntos:发生的事情, decisiones, responsables y plazos.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Contenido sustantivo</div>
+      </div>
+
+      <!-- 7 FIRMA -->
+      <div class="num-badge" style="background:#d35400;top:16rem;left:1rem" onclick="highlightComp(7)">7</div>
+      <div class="annotation arrow-bottom" style="bottom:-10px;left:2rem;max-width:200px" id="ann-7d">
+        <div class="annotation__label"><span class="annotation__num" style="background:#d35400">7</span> Firmas</div>
+        <div class="annotation__text">Firma de quien preside la reunión y del relator. Prueba de que las decisiones fueron tomadas por esas personas.</div>
+        <div class="annotation__gtc">GTC 185:2009 — Validez de las decisiones</div>
+      </div>
+
+      <div class="doc-page acta-doc">
+
+        <!-- 1 MEMBRETE -->
+        <div class="acta-doc__header">
+          <div class="acta-doc__title">📋 Acta de Reunión</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem">LatamBox S.A. · Comité de Operaciones</div>
+        </div>
+
+        <!-- 2 FECHA + 3 ASISTENTES + 4 ASUNTO -->
+        <div class="acta-doc__meta">
+          <div class="acta-doc__meta-item">
+            <div class="acta-doc__meta-label">Fecha y hora</div>
+            <div class="acta-doc__meta-value">30 de mayo de 2026 · 9:00 am</div>
+          </div>
+          <div class="acta-doc__meta-item">
+            <div class="acta-doc__meta-label">Lugar</div>
+            <div class="acta-doc__meta-value">Sala de juntas, piso 3</div>
+          </div>
+          <div class="acta-doc__meta-item">
+            <div class="acta-doc__meta-label">N° Acta</div>
+            <div class="acta-doc__meta-value">003/2026-OPS</div>
+          </div>
+        </div>
+
+        <!-- 4 ASUNTO / TEMA -->
+        <div style="background:#f4f6f9;border-left:4px solid var(--purple);padding:0.7rem 1rem;border-radius:0 6px 6px 0;margin-bottom:1rem;font-weight:700;font-size:0.88rem">
+          Tema: Revisión de protocolo de recepción — Incidentes zona de importación
+        </div>
+
+        <!-- 3 ASISTENTES -->
+        <div class="acta-doc__asistentes">
+          <div class="acta-doc__asistentes-title">Asistentes</div>
+          <div class="acta-doc__asistentes-list">
+            <span>Ing. Laura Ospina (Presidenta)</span>
+            <span>Ing. Carlos Mendoza (Relator)</span>
+            <span>Sra. María José López</span>
+            <span>Sr. Andrés Ruiz</span>
+            <span>Sra. Lucía Fuentes</span>
+            <span>Sr. Javier Mora</span>
+          </div>
+        </div>
+
+        <!-- 5 CUERPO / DESARROLLO -->
+        <div class="acta-doc__seccion">
+          <div class="acta-doc__seccion-title">📝 Desarrollo</div>
+          <p style="font-size:0.82rem;margin-bottom:0.5rem"><strong>Punto 1 — Situación actual:</strong> Se presentan los datos de los 3 paquetes perdidos en la zona de importación durante mayo 2026. Costo estimado: $4.2 millones en mercancía y logística. El incidente más crítico: paquete #447 con retención en aduana por error en declaración de valor.</p>
+          <p style="font-size:0.82rem;margin-bottom:0.5rem"><strong>Punto 2 — Causa raíz:</strong> Se identifica que el protocolo de escaneo no se está cumpliendo en un 40% de los paquetes que llegan después de las 6:00 pm (cambio de turno).</p>
+          <p style="font-size:0.82rem;margin-bottom:0.5rem"><strong>Punto 3 — Decisiones tomadas:</strong></p>
+          <ol style="font-size:0.82rem;padding-left:1.3rem;line-height:1.8">
+            <li>Nuevo protocolo de escaneo: máximo 2 horas post-recepción, sin excepción (Responsable: María José López, deadline: 8 junio).</li>
+            <li>Checklist de inspección obligatorio en formato digital (Responsable: Carlos Mendoza, deadline: 12 junio).</li>
+            <li>Capacitación al equipo del turno tarde (Responsable: Javier Mora, deadline: 15 junio).</li>
+          </ol>
+        </div>
+
+        <div class="acta-doc__seccion">
+          <div class="acta-doc__seccion-title">⏰ Próxima reunión</div>
+          <p style="font-size:0.82rem">Se cita nueva reunión para el 13 de junio de 2026 a las 9:00 am en sala de juntas, piso 3, para seguimiento de los compromisos adquiridos.</p>
+        </div>
+
+        <!-- 7 FIRMA -->
+        <div class="acta-doc__firma-block">
+          <div class="acta-doc__firma-item">
+            <div class="acta-doc__firma-line">Ing. Laura Ospina<br>Presidenta</div>
+          </div>
+          <div class="acta-doc__firma-item">
+            <div class="acta-doc__firma-line">Ing. Carlos Mendoza<br>Relator</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="descripcion">
+      <h3>📝 Acta de reunión — Documento administrativo</h3>
+      <p>El acta es el documento donde el <strong>cuerpo</strong> tiene secciones predefinidas (Desarrollo, Decisiones, Compromisos). El "destinatario" se convierte en "asistentes" porque el documento no se envía a alguien: quienes asisten ya están presentes.</p>
+    </div>
+
+  </div>
+
+  <!-- ─── RESUMEN ─── -->
+  <div class="doc-section" id="sec-resumen">
+    <div style="text-align:center; margin-bottom:1.5rem">
+      <span class="section-label" style="background:#e3f2fd;color:#1565c0">Resumen — Los 9 componentes</span>
+    </div>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#2c5ea8">1</div>
+        <div class="comp-card__name">Membrete</div>
+        <div class="comp-card__def">Identifica al emisor: nombre, logo, dirección, contacto. Establece la autoridad de quien habla.</div>
+        <div class="comp-card__ex">"LatamBox S.A. · Logística internacional"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#1e7a3e">2</div>
+        <div class="comp-card__name">Fecha</div>
+        <div class="comp-card__def">Ubica el documento en el tiempo. Sin fecha, no hay trazabilidad, no se puede verificar plazos.</div>
+        <div class="comp-card__ex">"Barranquilla, 2 de junio de 2026"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#e67e22">3</div>
+        <div class="comp-card__name">Destinatario</div>
+        <div class="comp-card__def">Quién recibe el documento. Define el alcance y la responsabilidad de lectura.</div>
+        <div class="comp-card__ex">"Para: Sra. María José López — Coordinador de Almacén"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#c0392b">4</div>
+        <div class="comp-card__name">Asunto</div>
+        <div class="comp-card__def">Resume el propósito en una línea. Es el primer filtro de atención del lector. (Pacori Cari, 2023)</div>
+        <div class="comp-card__ex">"Protocolo de recepción de paquetes — Actualización 2026"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#8e44ad">5</div>
+        <div class="comp-card__name">Cuerpo</div>
+        <div class="comp-card__def">Desarrolla la información, solicitud o decisión. Debe organizarse en párrafos breves con lógica clara.</div>
+        <div class="comp-card__ex">"Me dirijo a usted para comunicarle..."</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#16a085">6</div>
+        <div class="comp-card__name">Despedida</div>
+        <div class="comp-card__def">Cierra la comunicación con cortesía profesional. No es un adorno: cierra el tono.</div>
+        <div class="comp-card__ex">"Cordialmente", "Atentamente"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#d35400">7</div>
+        <div class="comp-card__name">Firma + Cargo</div>
+        <div class="comp-card__def">Quien firma se hace responsable del contenido. El cargo indica con qué autoridad lo hace.</div>
+        <div class="comp-card__ex">"Ing. Carlos Mendoza Ríos — Jefe de Operaciones"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#2ecc71">8</div>
+        <div class="comp-card__name">Anexos</div>
+        <div class="comp-card__def">Lista los documentos que acompañan. Garantiza que el lector sepa si el documento está completo.</div>
+        <div class="comp-card__ex">"(1) Checklist_v3.xlsx · (2) Protocolo_AWB.pdf"</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card__num" style="background:#7f8c8d">9</div>
+        <div class="comp-card__name">Copia (CC)</div>
+        <div class="comp-card__def">Informa quiénes más recibieron el documento. Crea testigo documental y modera el tono.</div>
+        <div class="comp-card__ex">"Copia para: Ing. Laura Ospina — Jefa de Operaciones"</div>
+      </div>
+    </div>
+
+    <div class="descripcion" style="margin-top:1.5rem">
+      <h3>🔑 Regla para identificar componentes en cualquier documento</h3>
+      <p>Ante cualquier documento, hacé estas 4 preguntas en orden:</p>
+      <ol style="padding-left:1.4rem;line-height:2;font-size:0.88rem">
+        <li><strong>¿Quién lo emite?</strong> → Membrete</li>
+        <li><strong>¿A quién va dirigido?</strong> → Destinatario</li>
+        <li><strong>¿De qué trata?</strong> → Asunto</li>
+        <li><strong>¿Qué decisión habilita?</strong> → El documento completo como sistema</li>
+      </ol>
+      <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted)">Fuente: GTC 185:2009 (ICONTEC) · Pacori Cari (2023) · ISO 15489-1:2016</p>
+    </div>
+
+    <div style="background:#1a1f36;color:white;border-radius:var(--radius);padding:1.5rem;margin-top:1.5rem;text-align:center">
+      <div style="font-size:0.78rem;opacity:0.7;margin-bottom:0.5rem">Caso integrador</div>
+      <div style="font-size:1.1rem;font-weight:700">📦 LatamBox S.A.</div>
+      <div style="font-size:0.82rem;opacity:0.7;margin-top:0.3rem">ADM18 · Procesamiento de la Información · IUB/Unibarranquilla · 2026</div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer style="text-align:center;padding:2rem 1rem;font-size:0.75rem;color:var(--muted)">
+  Anatomía del Documento — 9 componentes · ADM18 · GTC 185:2009 · IUB/Unibarranquilla · 2026
+</footer>
+
+<script>
+let activeSection = 'all';
+let highlighted = null;
+
+function showSection(id) {
+  activeSection = id;
+
+  document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav__links a').forEach(a => a.classList.remove('active'));
+
+  if (id === 'all') {
+    // Show first section as default
+    document.getElementById('sec-memo').classList.add('active');
+    document.querySelector('.nav__links a:nth-child(1)').classList.add('active');
+  } else {
+    const secMap = { memo: 'sec-memo', factura: 'sec-factura', email: 'sec-email', acta: 'sec-acta', resumen: 'sec-resumen' };
+    document.getElementById(secMap[id]).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  clearHighlights();
+}
+
+function highlightComp(num) {
+  // Clear previous highlight
+  clearHighlights();
+
+  // Map badge numbers to their sections
+  const badgeSections = {
+    1: ['ann-1', 'ann-1b', 'ann-1d'],
+    2: ['ann-2', 'ann-2b', 'ann-2d'],
+    3: ['ann-3', 'ann-3b', 'ann-3c', 'ann-3d'],
+    4: ['ann-4', 'ann-4b', 'ann-4c', 'ann-4d'],
+    5: ['ann-5', 'ann-5b', 'ann-5c', 'ann-5d'],
+    6: ['ann-6', 'ann-6b'],
+    7: ['ann-7', 'ann-7b', 'ann-7c', 'ann-7d'],
+    8: ['ann-8'],
+    9: ['ann-9', 'ann-9c'],
+  };
+
+  const anns = badgeSections[num] || [];
+  anns.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.borderColor = '#ffdf2d';
+      el.style.boxShadow = '0 4px 20px rgba(255, 200, 0, 0.4)';
+      el.style.transform = 'scale(1.05)';
+      el.style.transition = 'all 0.2s';
+    }
+  });
+
+  // Active button
+  document.querySelectorAll('.comp-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === num - 1);
+  });
+
+  // Scroll to first annotation
+  if (anns.length > 0) {
+    const first = document.getElementById(anns[0]);
+    if (first) {
+      setTimeout(() => {
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }
+}
+
+function clearHighlights() {
+  document.querySelectorAll('.annotation').forEach(el => {
+    el.style.borderColor = '';
+    el.style.boxShadow = '';
+    el.style.transform = '';
+  });
+}
+
+// Init: show first section
+showSection('all');
+</script>
+
+</body>
+</html>
