@@ -248,6 +248,7 @@ let selectedDoc = null;
 let selectedFunc = null;
 let attempts = 0;
 let matchCount = 0;
+let locked = false;
 
 function shuffle(arr) {
   const a = [...arr];
@@ -258,27 +259,36 @@ function shuffle(arr) {
   return a;
 }
 
-function makeCard(data, side) {
+function makeCard(pair, side) {
+  const esDoc = side === 'doc';
   const div = document.createElement('div');
   div.className = 'card';
-  div.dataset.id = data.id;
+  div.dataset.id = pair.id;
   div.dataset.side = side;
 
-  const typeClass = side === 'doc' ? 'card__type--doc' : 'card__type--func';
+  const typeClass = esDoc ? 'card__type--doc' : 'card__type--func';
 
   div.innerHTML = `
-    <div class="card__type ${typeClass}">${data.docClass || data.funcClass}</div>
-    <div class="card__text">${side === 'doc' ? data.doc : data.func}</div>
-    <div class="card__sub">${side === 'doc' ? data.docSub : ''}</div>
-    <div class="card__pair">✓ ${side === 'doc' ? data.func : data.doc}</div>
+    <div class="card__type ${typeClass}">${esDoc ? pair.docClass : pair.funcClass}</div>
+    <div class="card__text">${esDoc ? pair.doc : pair.func}</div>
+    <div class="card__sub">${esDoc ? pair.docSub : ''}</div>
+    <div class="card__pair">✓ ${esDoc ? pair.func : pair.doc}</div>
   `;
 
-  div.addEventListener('click', () => onCardClick(div, side, data.id));
+  div.addEventListener('click', () => onCardClick(div, side, pair.id));
   return div;
 }
 
 function onCardClick(card, side, id) {
+  if (locked) return;
   if (card.classList.contains('matched') || card.classList.contains('disabled')) return;
+
+  // Re-click on the same card deselects it
+  if (card.classList.contains('selected')) {
+    card.classList.remove('selected');
+    if (side === 'doc') selectedDoc = null; else selectedFunc = null;
+    return;
+  }
 
   // Deselect previous
   document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
@@ -295,12 +305,15 @@ function onCardClick(card, side, id) {
     attempts++;
     document.getElementById('score-attempts').textContent = attempts;
 
+    const docEl = selectedDoc.el;
+    const funcEl = selectedFunc.el;
+
     if (selectedDoc.id === selectedFunc.id) {
       // Match!
-      selectedDoc.el.classList.remove('selected');
-      selectedFunc.el.classList.remove('selected');
-      selectedDoc.el.classList.add('matched', 'disabled');
-      selectedFunc.el.classList.add('matched', 'disabled');
+      docEl.classList.remove('selected');
+      funcEl.classList.remove('selected');
+      docEl.classList.add('matched', 'disabled');
+      funcEl.classList.add('matched', 'disabled');
       matchCount++;
       document.getElementById('score-matches').textContent = matchCount;
       selectedDoc = null;
@@ -310,14 +323,16 @@ function onCardClick(card, side, id) {
         setTimeout(showResult, 400);
       }
     } else {
-      // Wrong
-      selectedDoc.el.classList.add('wrong');
-      selectedFunc.el.classList.add('wrong');
+      // Wrong — bloquear clics hasta que termine la animación
+      locked = true;
+      docEl.classList.add('wrong');
+      funcEl.classList.add('wrong');
       setTimeout(() => {
-        selectedDoc.el.classList.remove('selected', 'wrong');
-        selectedFunc.el.classList.remove('selected', 'wrong');
+        docEl.classList.remove('selected', 'wrong');
+        funcEl.classList.remove('selected', 'wrong');
         selectedDoc = null;
         selectedFunc = null;
+        locked = false;
       }, 800);
     }
   }
@@ -342,6 +357,7 @@ function resetGame() {
   selectedFunc = null;
   attempts = 0;
   matchCount = 0;
+  locked = false;
   document.getElementById('score-matches').textContent = '0';
   document.getElementById('score-attempts').textContent = '0';
   document.getElementById('result').classList.remove('show');
@@ -349,8 +365,8 @@ function resetGame() {
 }
 
 function initGame() {
-  const docs = shuffle(PAIRS.map(p => ({ id: p.id, doc: p.doc, docSub: p.docSub, docClass: p.docClass })));
-  const funcs = shuffle(PAIRS.map(p => ({ id: p.id, func: p.func, funcClass: p.funcClass })));
+  const docs = shuffle(PAIRS);
+  const funcs = shuffle(PAIRS);
 
   const docCol = document.getElementById('cards-doc');
   const funcCol = document.getElementById('cards-func');
