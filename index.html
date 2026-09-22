@@ -267,9 +267,13 @@ function makeCard(pair, side) {
   div.dataset.side = side;
 
   const typeClass = esDoc ? 'card__type--doc' : 'card__type--func';
+  // La clase documental solo se muestra en la columna de Documentos.
+  // En Funciones se oculta para que el estudiante razone la función y no
+  // empareje por coincidencia de rótulo (doc y función comparten clase).
+  const typeLabel = esDoc ? pair.docClass : 'Función';
 
   div.innerHTML = `
-    <div class="card__type ${typeClass}">${esDoc ? pair.docClass : pair.funcClass}</div>
+    <div class="card__type ${typeClass}">${typeLabel}</div>
     <div class="card__text">${esDoc ? pair.doc : pair.func}</div>
     <div class="card__sub">${esDoc ? pair.docSub : ''}</div>
     <div class="card__pair">✓ ${esDoc ? pair.func : pair.doc}</div>
