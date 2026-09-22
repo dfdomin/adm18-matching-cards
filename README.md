@@ -34,13 +34,25 @@ Que el estudiante asocie cada tipo de documento con su función principal, disti
 
 ## Cómo usar
 
-Abre `index.html` en un navegador. Los estudiantes hacen clic en una tarjeta de documento (columna izquierda) y luego en la función que le corresponde (columna derecha).
+**Pensada para el celular** (también funciona en computador). Abre `index.html` en el navegador.
 
-- **10 pares** basados en documentos reales de LatamBox
-- Se shufflean en cada reinicio
-- Lleva registro de intentos y pares completados
-- La **clase documental** (Comercial/Administrativo/Legal/Técnico) se muestra solo en la columna de Documentos. En la columna de Funciones se oculta a propósito: como documento y función comparten clase, mostrarla permitiría emparejar por coincidencia de rótulo sin razonar la función.
-- Al emparejar, la tarjeta revela el texto de su pareja. Durante la animación de error los clics se bloquean (no se registran intentos fantasma).
+1. **Instrucciones + 4 ejemplos guiados** al inicio: cómo se juega (4 pasos), la pregunta que clasifica y un ejemplo por clase con retroalimentación y razón. El estudiante puede empezar cuando quiera (botón «Saltar a la actividad»).
+2. **Actividad**: 10 pares con documentos reales de LatamBox, barajados en cada reinicio, con contador de pares e intentos y barra de progreso.
+
+La **clase documental** (Comercial/Administrativo/Legal/Técnico) se muestra **solo en la columna de Documentos**. En Funciones se oculta a propósito: como documento y función comparten clase, mostrarla permitiría emparejar por coincidencia de rótulo sin razonar la función.
+
+### Interacción
+
+| | Celular (< 860 px) | Escritorio (≥ 860 px) |
+|---|---|---|
+| Columnas | **Una a la vez**, con pestañas `📄 Documentos` / `🎯 Funciones` | Dos columnas lado a lado |
+| Flujo | Toca un documento → **salta sola** a Funciones → toca la función | Elige libremente en ambas columnas |
+| Guía | **Bandeja fija al pie**: dice qué está seleccionado y avisa del error | Bandeja bajo el tablero |
+
+- Al tocar un documento, la app cambia de pestaña automáticamente; al acertar (o fallar) vuelve a Documentos.
+- En error, la bandeja muestra **««doc» no va con «función»»** (en móvil el par comparado puede quedar fuera de pantalla) y los clics se bloquean 0,8 s para evitar intentos fantasma.
+- Al emparejar, la tarjeta revela el texto de su pareja.
+- Áreas táctiles ≥ 44 px, sin desplazamiento horizontal, `touch-action: manipulation` (sin retardo de doble toque).
 
 ## Recursos
 
