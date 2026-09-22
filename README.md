@@ -9,9 +9,28 @@ Caso integrador: **LatamBox S.A.**
 Que el estudiante asocie cada tipo de documento con su función principal, distinguiendo entre las 4 clases documentales de la GTC 185:2009:
 
 - **Comercial** — registra transacciones económicas
-- **Administrativo** — regula comunicación interna
+- **Administrativo** — regula la comunicación y la coordinación (memorandos, actas, correos)
 - **Legal** — tiene efecto jurídico
 - **Técnico** — describe especificaciones operativas
+
+## Criterio de clasificación (fuente: `adm18-material/semana-03/index.html`)
+
+| Documento | Clase | Clave |
+|---|---|---|
+| Factura de Amazon | Comercial | semana-03 · "la factura de Amazon" |
+| Cotización de flete | Comercial | semana-03 · "la cotización de servicios" |
+| Guía aérea AWB | Técnico | semana-03 · "la guía aérea es un documento técnico" |
+| Manual de procedimiento | Técnico | semana-03 · "el manual de procedimiento" |
+| Memorando interno | Administrativo | semana-03 · "el memorando" |
+| Acta de reunión | Administrativo | semana-03 · "el acta de reunión" |
+| Encuesta de satisfacción | Administrativo | semana-14 (clave) · "queja → Clase: Administrativo" |
+| Correo de nacionalización | Administrativo | **corregido**: semana-05 y semana-14 (claves) clasifican los correos como "Clase: Administrativo"; un correo es una comunicación |
+| Declaración de valor | Legal | semana-03 · "la declaración aduanera" |
+| Comprobante de impuestos | Legal | semana-03 · "el comprobante de impuestos" |
+
+**Distribución:** Comercial 2 · Administrativo 4 · Legal 2 · Técnico 2.
+
+> ⚠️ La clase sigue la **naturaleza del documento**, no su tema. El *correo de nacionalización* trata de aduana (parece Legal), pero como documento es una comunicación → Administrativo. Ese es el distractor intencional de la actividad.
 
 ## Cómo usar
 
