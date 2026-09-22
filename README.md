@@ -20,6 +20,8 @@ Abre `index.html` en un navegador. Los estudiantes hacen clic en una tarjeta de 
 - **10 pares** basados en documentos reales de LatamBox
 - Se shufflean en cada reinicio
 - Lleva registro de intentos y pares completados
+- La **clase documental** (Comercial/Administrativo/Legal/Técnico) se muestra solo en la columna de Documentos. En la columna de Funciones se oculta a propósito: como documento y función comparten clase, mostrarla permitiría emparejar por coincidencia de rótulo sin razonar la función.
+- Al emparejar, la tarjeta revela el texto de su pareja. Durante la animación de error los clics se bloquean (no se registran intentos fantasma).
 
 ## Recursos
 
